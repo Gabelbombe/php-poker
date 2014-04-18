@@ -2,7 +2,9 @@
 error_reporting(-1);
 ini_set('display_errors', 1);
 
+define('ENV_MODE', (getenv('ENV_MODE')?getenv('ENV_MODE'):'Development'));
 define('APP_PATH', dirname(__DIR__));
+
 require APP_PATH . '/src/Helpers/AutoLoader.php';
 
 $autoLoader = New AutoLoader(APP_PATH . '/src/');
