@@ -2,6 +2,8 @@
 
 Namespace Poker
 {
+    USE ServiceProvider\ConfigServiceProvider AS Config;
+
     Class DataAdapter
     {
         public static   $db;

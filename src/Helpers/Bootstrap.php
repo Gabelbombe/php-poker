@@ -7,7 +7,9 @@
 Namespace Helpers
 {
     USE Poker\DataAdapter   AS Adapter;
-    USE Poker\HoldEm        AS Game; //backwards, should be using Poker\HoldEm AS Game or something
+    USE Poker\HoldEm        AS Game;        //backwards, should be using Poker\HoldEm AS Game or something
+    USE ServiceProvider     AS Config;      //base config selector
+
 
     Class Bootstrap
     {
@@ -68,7 +70,7 @@ Namespace Helpers
 
             $adapter = New Adapter();
 
-            print_r($adapter);
+            echo 'Adapter: ' . print_r($adapter->init(), 1);
 
         }
 

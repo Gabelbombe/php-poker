@@ -1,5 +1,9 @@
 <?php
 
+//require APP_PATH . '/src/Helpers/ServiceProvider/ConfigServiceProvider.php';
+
+//USE ServiceProvider\ConfigServiceProvider AS Config;
+
 Class AutoLoader
 {
     protected $rootPath;
@@ -13,6 +17,7 @@ Class AutoLoader
     {
         $this->registerGenericNamespace($namespace, $path)
              ->registerLibraryNamespace()
+             ->registerConfigNamespace()
              ->registerHelperNamespace();
 
         return $this;
@@ -53,6 +58,14 @@ Class AutoLoader
     public function registerLibraryNamespace()
     {
         $autoloader = $this->getAutoloader('Library', $this->rootPath .'/Library/');
+        $this->registerAutoloader($autoloader);
+
+        return $this;
+    }
+
+    public function registerConfigNamespace()
+    {
+        $autoloader = $this->getAutoloader('ServiceProvider', $this->rootPath .'/Helper/ServiceProvider/');
         $this->registerAutoloader($autoloader);
 
         return $this;
