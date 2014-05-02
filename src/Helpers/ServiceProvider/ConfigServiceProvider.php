@@ -10,7 +10,7 @@ Namespace ServiceProvider
         private $replacements = [],
                 $config       = [];
 
-        public function __construct($filename = ENV_FILE, array $replacements = array(), ConfigDriver $driver = null)
+        public function __construct($filename = ENV_FILE, array $replacements = [], ConfigDriver $driver = null)
         {
             $this->filename = $filename;
 

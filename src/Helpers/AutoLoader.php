@@ -65,7 +65,7 @@ Class AutoLoader
 
     public function registerConfigNamespace()
     {
-        $autoloader = $this->getAutoloader('ServiceProvider', $this->rootPath .'/Helper/ServiceProvider/');
+        $autoloader = $this->getAutoloader('ServiceProvider', $this->rootPath .'/Helpers/ServiceProvider/');
         $this->registerAutoloader($autoloader);
 
         return $this;

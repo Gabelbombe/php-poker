@@ -11,7 +11,10 @@ Namespace Poker
 
         public static function init()
         {
-            $config = self::config();
+            $config = New Config(); //self::config();
+
+            print_r($config);
+die('hit');
 
             try {
                 self::$db = New PDO("mysql:host={$config->host};port={$config->port};dbname={$config->name}", $config->user, $config->pass,
