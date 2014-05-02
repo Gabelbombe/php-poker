@@ -12,12 +12,13 @@ Namespace Poker
         public static function init()
         {
             $config = New Config(); //self::config();
+            $config->register();    //get base config
 
-            print_r($config);
+            print_r($config->getConfig()->host);
 die('hit');
 
             try {
-                self::$db = New PDO("mysql:host={$config->host};port={$config->port};dbname={$config->name}", $config->user, $config->pass,
+                self::$db = New PDO("mysql:host={$config->dbhost};port={$config->dbport};dbname={$config->dbname}", $config->dbuser, $config->dbpass,
                     array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
                 );
                 self::$_err['connects'] = json_encode(array('outcome' => true));

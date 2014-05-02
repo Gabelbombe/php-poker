@@ -1,0 +1,7 @@
+{
+    "DHost": "127.0.0.1",
+    "DBName": "holdem",
+    "DBPort": 3306,
+    "DBUser": "TexasHoldEmUser",
+    "DBPass": "TexasHoldEmPass"
+}

@@ -16,7 +16,7 @@ Namespace ServiceProvider
 
             if ($replacements)
             {
-                foreach ($replacements as $key => $value) $this->replacements['%'.$key.'%'] = $value;
+                foreach ($replacements AS $key => $value) $this->replacements['%'.$key.'%'] = $value;
             }
 
             $this->driver = $driver ?: New ChainConfigDriver([
