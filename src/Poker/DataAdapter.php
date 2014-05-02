@@ -14,12 +14,11 @@ Namespace Poker
             $config = New Config(); //self::config();
             $config->register();    //get base config
 
-            print_r($config->getConfig()->host);
-die('hit');
+            $config = (object) $config->getConfig();
 
             try {
-                self::$db = New PDO("mysql:host={$config->dbhost};port={$config->dbport};dbname={$config->dbname}", $config->dbuser, $config->dbpass,
-                    array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
+                self::$db = New \PDO("mysql:host={$config->DBHost};port={$config->DBPort};dbname={$config->DBName}", $config->DBUser, $config->DBPass,
+                    [ \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION ]
                 );
                 self::$_err['connects'] = json_encode(array('outcome' => true));
             }
