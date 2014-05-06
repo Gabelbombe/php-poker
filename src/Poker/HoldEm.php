@@ -307,9 +307,12 @@ Namespace Poker
             return $this->playerPts[$this->winner]['description'];
         }
 
-        private function convert($cards)
+        public function convert($cards, $subarray = FASLE)
         {
             $cCards = [];
+            $cards  = ($subarray)
+                ? array_pop($cards)
+                : cards;
 
             foreach($cards AS $card)
             {

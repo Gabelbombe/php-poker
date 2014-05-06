@@ -27,30 +27,33 @@ Namespace Poker
                 self::$_err['connects'] = json_encode(array('outcome' => false, 'error' => $ex, 'message' => 'Unable to connect'));
                 die;
             }
+
+            return 'Connection established';
         }
 
-        private static function config()
-        {
-            return (object) parse_ini_file(APP_PATH .'/config/offshore.ini');
-        }
+//        Legacy Code
+//        private static function config()
+//        {
+//            return (object) parse_ini_file(APP_PATH .'/config/offshore.ini');
+//        }
+
     }
 
-    Class start Extends DataAdapter
+    Class Session Extends DataAdapter
     {
         public static function push($vendor)
         {
             $st = self::$db->prepare(
-                'UPDATE website_checkouts SET rev_hash = :rev_hash, checkout_dir = :checkout_dir, changes = :changes, completed = "Y" WHERE id = :uid'
+                'INSERT INTO session_store SET utid = :utid, hand = :hand, winner = :winner, active = 1'
             );
 
             $vendor = self::cleanLogMessage($vendor);
 
-            $st->execute(array(
-                ':uid'          => $vendor->i,
-                ':checkout_dir' => $vendor->d,
-                ':changes'      => $vendor->c,
-                ':rev_hash'     => $vendor->h, #offset rev_hash in case its
-            ));
+            $st->execute([
+                ':utid'     => $vendor->i,
+                ':hand'     => $vendor->d,
+                ':winner'   => $vendor->c,
+            ]);
         }
 
         private static function cleanLogMessage($vendor)

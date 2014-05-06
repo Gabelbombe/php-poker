@@ -13,8 +13,10 @@ Namespace Helpers
 
     Class Bootstrap
     {
-        private $players = FALSE,
-                $utid    = FALSE;
+        private     $players = FALSE,
+                    $utid    = FALSE;
+
+        protected   $game    = NULL;
 
 
         public function __construct(array $payload = array())
@@ -44,22 +46,32 @@ Namespace Helpers
             }
         }
 
+        public function createGame()
+        {
+            $this->game = New Game($this->players);
+
+                return $this;
+        }
+
+
         public function doView()
         {
             $game = New Game($this->players);
 
             echo "Let's go guys!!!\n";
 
+            echo "\n\n" . print_r($game->showPlayerHands(),  1);
+
             foreach (['flop', 'turn', 'river'] AS $part)
             {
                 $action  = ('show' . ucfirst($part));
                 echo "\n" . strtoupper($part) . ':' . implode(' ', $game->$action()); // cheap action calling
+                sleep(3);
             }
 
             echo "\n\n" . ucwords(str_replace('_', ' ', $game->getWinner()))
                 . " wins!!! ({$game->getWinningDescription()})"; // the winner
 
-            echo "\n\n" . print_r($game->showPlayerHands(),  1);
             # echo "\n\n" . print_r($game->showPlayerPoints(), 1);
 
         }
@@ -69,10 +81,20 @@ Namespace Helpers
             $this->utid = md5(time() + rand());
 
             $adapter = New Adapter();
+            $adapter->init();
 
-            echo 'Adapter: ' . print_r($adapter->init(), 1);
+            $this->createGame();
 
+            echo "Let's go guys!!!\nYou're hand: " . implode(' ', $this->getUsersHand());
+
+            die;
+            $this->doView();
         }
 
+        private function getUsersHand()
+        {
+
+            return $this->game->convert($this->game->getHands(1, 2), 1);
+        }
     }
 }
