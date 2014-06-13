@@ -1,3 +1,6 @@
+CREATE DATABASE holdem;
+USE holdem;
+
 CREATE TABLE `session_store` (
   `id`                  bigint(20) NOT NULL AUTO_INCREMENT,
   `utid`                varchar(127) DEFAULT NULL,
@@ -8,5 +11,6 @@ CREATE TABLE `session_store` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
 Create User TexasHoldEmUser@'%' Identified By 'TexasHoldEmPass';
-Grant Insert, Select, Update, Delete On holdem To TexasHoldEmUser@'%';
+Grant Insert, Select, Update, Delete On holdem.* To TexasHoldEmUser@'%';
 
+FLUSH PRIVILEGES;
