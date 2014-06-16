@@ -8,6 +8,7 @@ Namespace Helpers
 {
     USE Poker\DataAdapter   AS Adapter;
     USE Poker\HoldEm        AS Game;        //backwards, should be using Poker\HoldEm AS Game or something
+    use Poker\Session;
     USE ServiceProvider     AS Config;      //base config selector
 
 
@@ -40,15 +41,21 @@ Namespace Helpers
 
         protected function assign()
         {
-            if (isset($this->payload) && ! empty($this->payload))
+            if (isset($this->game) && ! empty($this->game))
             {
+                print_r($this->game);
+
                 // do nothing atm
             }
+
+            die('HIT');
         }
 
         public function createGame()
         {
             $this->game = New Game($this->players);
+
+            $this->assign($this->game);
 
                 return $this;
         }
@@ -81,11 +88,15 @@ Namespace Helpers
             $this->utid = md5(time() + rand());
 
             $adapter = New Adapter();
-            $adapter->init();
+            $adapter->init();           // connection established
 
+//            $session = New Session();
+//            $session->push($this->createGame());
             $this->createGame();
 
             echo "Let's go guys!!!\nYou're hand: " . implode(' ', $this->getUsersHand());
+            echo "\n\n";
+
 
             die;
             $this->doView();

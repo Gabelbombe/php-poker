@@ -15,7 +15,6 @@ Namespace Poker
             $config->register();    //get base config
 
             $config = (object) $config->getConfig();
-
             try {
                 self::$db = New \PDO("mysql:host={$config->DBHost};port={$config->DBPort};dbname={$config->DBName}", $config->DBUser, $config->DBPass,
                     [ \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION ]
@@ -43,6 +42,8 @@ Namespace Poker
     {
         public static function push($vendor)
         {
+
+print_r($vendor); die;
             $st = self::$db->prepare(
                 'INSERT INTO session_store SET utid = :utid, hand = :hand, winner = :winner, active = 1'
             );
