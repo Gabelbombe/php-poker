@@ -1,6 +1,6 @@
 <?php
 
-Namespace Poker
+Namespace Database
 {
     USE ServiceProvider\ConfigServiceProvider AS Config;
 
