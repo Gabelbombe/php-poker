@@ -15,6 +15,7 @@ $autoLoader = New AutoLoader(APP_PATH . '/src/');
 
 $autoLoader->registerNamespaces()
            ->registerGenericNamespace('Helpers')
+           ->registerGenericNamespace('Database')
            ->registerGenericNamespace('Poker');
 
 $payload =
