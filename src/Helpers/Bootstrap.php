@@ -7,7 +7,7 @@
 Namespace Helpers
 {
     USE Poker\HoldEm        AS Game;        //backwards, should be using Poker\HoldEm AS Game or something
-    use Database\Broker     AS Broker;
+    USE Database\Broker     AS Broker;      //DB Connector
     USE ServiceProvider     AS Config;      //base config selector
 
 
@@ -34,21 +34,8 @@ Namespace Helpers
             header('Content-type: text/plain; charset=UTF-8');
 
             if (! isset($_SESSION['utid'])) $this->createNewSession();
-
-
         }
 
-        protected function assign()
-        {
-            if (isset($this->game) && ! empty($this->game))
-            {
-                print_r($this->game->encodePlayersHands());
-
-                // do nothing atm
-            }
-
-//            die('HIT');
-        }
 
         /**
          * Crates and assigns a current game for session
@@ -58,8 +45,6 @@ Namespace Helpers
         public function createGame()
         {
             $this->game = New Game($this->players);
-
-            $this->assign($this->game);
 
                 return $this;
         }
@@ -81,7 +66,7 @@ Namespace Helpers
         {
             return (true === (0 < $this->players) && is_numeric($this->players))
                 ? $this->players
-                : null;
+                : false;
         }
 
         public function doView()

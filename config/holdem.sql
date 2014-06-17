@@ -1,6 +1,14 @@
 CREATE DATABASE holdem;
 USE holdem;
 
+
+CREATE TABLE `users` (
+  `id`                  bigint(20)    NOT NULL AUTO_INCREMENT,
+  `utid`                varchar(127)  DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
+
+
 CREATE TABLE `session_store` (
   `id`                  bigint(20)    NOT NULL AUTO_INCREMENT,
   `utid`                varchar(127)  DEFAULT NULL,
@@ -18,6 +26,16 @@ CREATE TABLE `current_game` (
   `serial`              varchar(255)  DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `bank` (
+  `id`                  bigint(20)    NOT NULL AUTO_INCREMENT,
+  `utid`                varchar(127)  DEFAULT NULL,
+  `wallet`               int(50)      NOT NULL DEFAULT 1000,
+  `bet`                 int(10)       DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 Create User TexasHoldEmUser@'%' Identified By 'TexasHoldEmPass';
 Grant Insert, Select, Update, Delete On holdem.* To TexasHoldEmUser@'%';

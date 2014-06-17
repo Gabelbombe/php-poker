@@ -57,12 +57,12 @@ Namespace Database
                 'u'     => $this->utid,
 
                 // session_store
-                'h'     => $payload->getGame()->getHands(1,0),
+                'h'     => $this->encode($payload->getGame()->getHands(1)),
                 'w'     => $payload->getGame()->getWinner(),
 
                 // current_game
                 'c'     => $payload->getPlayers(),
-
+                'd'     => $this->encode($payload->getGame()->getCompletedPlayerData())
             ];
 
             parent::init();
@@ -108,6 +108,16 @@ Namespace Database
         private static function parse()
         {
             return parse_ini_file(APP_PATH . '/config/blacklist.ini');
+        }
+
+        private function encode($data)
+        {
+            return json_encode($data);
+        }
+
+        private function decode($data)
+        {
+            return json_decode($data);
         }
     }
 }

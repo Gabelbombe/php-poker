@@ -52,7 +52,7 @@ Namespace Poker
          * @return array
          * @throws \InvalidArgumentException
          */
-        public function getHands($players, $cards)
+        public function getHands($players, $cards = 2)
         {
             if (FALSE === (is_int($players) || is_int($cards))) Throw New \InvalidArgumentException('Method only accepts integers.');
 
@@ -64,6 +64,10 @@ Namespace Poker
                 ++$player;
 
                 $this->playerHands["player_{$player}"][] = $this->deckShuffle[$i];
+
+                $cards = (2 > $cards) // two is your limit
+                    ? $cards
+                    : 2;
 
                 for ($j = 1; $j < $cards; ++$j)
                 {
@@ -339,11 +343,6 @@ Namespace Poker
             return $cCards;
         }
 
-        public function getGame()
-        {
-            print_r($this); die;
-        }
-
         /**
          * Return the players hand
          *
@@ -361,6 +360,18 @@ Namespace Poker
             return $players;
         }
 
+        /**
+         * Dump a player
+         *
+         * @param int $id
+         * @return array|bool
+         */
+        public function getCompletedPlayerData($id = 1)
+        {
+            return (isset($this->playerPts["player_{$id}"]) && ! empty($this->playerPts["player_{$id}"]))
+                ? $this->playerPts["player_{$id}"]
+                : false;
+        }
 
         /**
          * Return the players points
