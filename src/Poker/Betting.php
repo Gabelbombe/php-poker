@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * http://www.pokerlistings.com/texas-holdem-betting-rules
+ */
 Namespace Poker
 {
     use Database\Broker;
