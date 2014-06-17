@@ -13,19 +13,25 @@ Namespace Helpers
 
     Class Bootstrap
     {
-        private     $players = FALSE,
-                    $utid    = FALSE;
+        private     $players = false,
+                    $utid    = false;
 
-        protected   $game    = NULL;
+        protected   $game    = false;
 
 
-        public function __construct(array $payload = array())
+        public function __construct(array $payload = [])
         {
             // convert CLI opts to GET params if you're playing from the command line
             if (! $payload['type']) parse_str(implode("&", array_slice($payload['args'], 1)), $_GET);
 
             // normally wouldn't do this without filtering but I"m already over time....
-            $this->players = (isset($_GET['players'])) ? $_GET['players'] : FALSE; // filter_input
+            $this->players = (isset($_GET['players'])) ? $_GET['players']  : false; // filter_input
+
+            // available rules: NoLimit,
+            $this->rules = (isset($_GET['rules']))
+                ? $this->setRules($_GET['rules'])
+                : 'nolimit';
+
         }
 
 

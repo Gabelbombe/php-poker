@@ -7,10 +7,8 @@ Namespace Database
     Class Adapter
     {
         public  static      $db;
-
-        protected    $utid = null;
-
         private static      $_err = [];
+        protected           $utid = null;
 
         public function __construct($utid)
         {
@@ -84,32 +82,6 @@ Namespace Database
             ]);
         }
 
-        private static function cleanLogMessage($vendor)
-        {
-            // stage blacklisted files
-            $blacklist = self::parse();
-            $blacklist = array_flip(array_pop($blacklist)); // strict standard violation on pass-by-ref
-
-            // trim marker, make base array
-            $subject = preg_split ('/$\R?^/m', trim($vendor->c));
-
-            if (! is_array($subject)) return $vendor;
-
-            $vendor->c = [];
-            foreach ($subject AS $mod)
-            {
-                // short circuit set if outside of blacklist
-                (isset($blacklist[trim(substr($mod, 1))])) ?: $vendor->c[$mod[0]][] = trim(substr($mod, 1));
-            }
-            $vendor->c = json_encode(['t' => $vendor->t, 'c' => $vendor->c]);
-            return $vendor;
-        }
-
-        private static function parse()
-        {
-            return parse_ini_file(APP_PATH . '/config/blacklist.ini');
-        }
-
         private function encode($data)
         {
             return json_encode($data);
@@ -118,6 +90,27 @@ Namespace Database
         private function decode($data)
         {
             return json_decode($data);
+        }
+    }
+
+    Class Cachier Extends Adapter
+    {
+        public function __construct($utid)
+        {
+            parent::__construct($utid);
+        }
+
+        public function payout($total)
+        {
+            $st = self::$db->prepare(
+                'INSERT INTO session_store SET utid = :utid, hand = :hand, winner = :winner, active = 1'
+            );
+
+            $st->execute([
+                ':utid'     => $this->u,
+                ':hand'     => $this->h,
+                ':winner'   => $this->w,
+            ]);
         }
     }
 }
