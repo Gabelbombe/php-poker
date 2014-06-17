@@ -6,9 +6,8 @@
 
 Namespace Helpers
 {
-    USE Poker\DataAdapter   AS Adapter;
     USE Poker\HoldEm        AS Game;        //backwards, should be using Poker\HoldEm AS Game or something
-    use Poker\Session;
+    use Database\Broker     AS Broker;
     USE ServiceProvider     AS Config;      //base config selector
 
 
@@ -43,14 +42,19 @@ Namespace Helpers
         {
             if (isset($this->game) && ! empty($this->game))
             {
-                print_r($this->game);
+                print_r($this->game->encodePlayersHands());
 
                 // do nothing atm
             }
 
-            die('HIT');
+//            die('HIT');
         }
 
+        /**
+         * Crates and assigns a current game for session
+         *
+         * @return $this
+         */
         public function createGame()
         {
             $this->game = New Game($this->players);
@@ -60,6 +64,25 @@ Namespace Helpers
                 return $this;
         }
 
+
+        /**
+         * Returns the current game
+         *
+         * @return object|null
+         */
+        public function getGame()
+        {
+            return (isset($this->game) && ! empty($this->game))
+                ? $this->game
+                : false;
+        }
+
+        public function getPlayers()
+        {
+            return (true === (0 < $this->players) && is_numeric($this->players))
+                ? $this->players
+                : null;
+        }
 
         public function doView()
         {
@@ -87,12 +110,8 @@ Namespace Helpers
         {
             $this->utid = md5(time() + rand());
 
-            $adapter = New Adapter();
-            $adapter->init();           // connection established
-
-//            $session = New Session();
-//            $session->push($this->createGame());
-            $this->createGame();
+            $session = New Broker($this->utid, $this->createGame());
+            $session->push();
 
             echo "Let's go guys!!!\nYou're hand: " . implode(' ', $this->getUsersHand());
             echo "\n\n";

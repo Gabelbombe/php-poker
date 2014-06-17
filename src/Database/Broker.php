@@ -4,10 +4,18 @@ Namespace Poker
 {
     USE ServiceProvider\ConfigServiceProvider AS Config;
 
-    Class DataAdapter
+    Class Adapter
     {
-        public static   $db;
-        private static  $_err = array();
+        public  static      $db;
+
+        protected    $utid = null;
+
+        private static      $_err = [];
+
+        public function __construct($utid)
+        {
+            $this->utid = $utid;
+        }
 
         public static function init()
         {
@@ -19,41 +27,60 @@ Namespace Poker
                 self::$db = New \PDO("mysql:host={$config->DBHost};port={$config->DBPort};dbname={$config->DBName}", $config->DBUser, $config->DBPass,
                     [ \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION ]
                 );
-                self::$_err['connects'] = json_encode(array('outcome' => true));
+                self::$_err['connects'] = json_encode(['outcome' => true]);
             }
             catch(PDOException $ex)
             {
-                self::$_err['connects'] = json_encode(array('outcome' => false, 'error' => $ex, 'message' => 'Unable to connect'));
+                self::$_err['connects'] = json_encode(['outcome' => false, 'error' => $ex, 'message' => 'Unable to connect']);
                 die;
             }
 
             return 'Connection established';
         }
-
-//        Legacy Code
-//        private static function config()
-//        {
-//            return (object) parse_ini_file(APP_PATH .'/config/offshore.ini');
-//        }
-
     }
 
-    Class Session Extends DataAdapter
+    /**
+     * Class Session
+     * @package Poker
+     */
+    Class Broker Extends Adapter
     {
-        public static function push($vendor)
+        private $session   = [];
+
+        public function __construct($utid, $payload)
+        {
+            parent::__construct($utid);
+
+            $this->session = (object) [
+
+                // globally available
+                'u'     => $this->utid,
+
+                // session_store
+                'h'     => $payload->getGame()->getHands(1,0),
+                'w'     => $payload->getGame()->getWinner(),
+
+                // current_game
+                'c'     => $payload->getPlayers(),
+
+            ];
+
+            parent::init();
+        }
+
+        public function push()
         {
 
-print_r($vendor); die;
+
+            print_r($this); die;
             $st = self::$db->prepare(
                 'INSERT INTO session_store SET utid = :utid, hand = :hand, winner = :winner, active = 1'
             );
 
-            $vendor = self::cleanLogMessage($vendor);
-
             $st->execute([
-                ':utid'     => $vendor->i,
-                ':hand'     => $vendor->d,
-                ':winner'   => $vendor->c,
+                ':utid'     => $this->u,
+                ':hand'     => $this->h,
+                ':winner'   => $this->w,
             ]);
         }
 
@@ -68,13 +95,13 @@ print_r($vendor); die;
 
             if (! is_array($subject)) return $vendor;
 
-            $vendor->c = array();
+            $vendor->c = [];
             foreach ($subject AS $mod)
             {
                 // short circuit set if outside of blacklist
                 (isset($blacklist[trim(substr($mod, 1))])) ?: $vendor->c[$mod[0]][] = trim(substr($mod, 1));
             }
-            $vendor->c = json_encode(array('t' => $vendor->t, 'c' => $vendor->c));
+            $vendor->c = json_encode(['t' => $vendor->t, 'c' => $vendor->c]);
             return $vendor;
         }
 

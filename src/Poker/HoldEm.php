@@ -76,6 +76,23 @@ Namespace Poker
             return $this->playerHands;
         }
 
+        /**
+         * Dump all the hands in play
+         *
+         * @return array|bool
+         */
+        public function getAllHands()
+        {
+            return (isset($this->playerHands) && ! empty($this->playerHands))
+                ? $this->playerHands
+                : false;
+        }
+
+
+        public function encodePlayersHands()
+        {
+            return json_encode($this->playerHands);
+        }
 
         /**
          * Pull {$number} of cards
@@ -307,12 +324,12 @@ Namespace Poker
             return $this->playerPts[$this->winner]['description'];
         }
 
-        public function convert($cards, $subarray = FASLE)
+        public function convert($cards, $subArray = FALSE)
         {
             $cCards = [];
-            $cards  = ($subarray)
+            $cards  = ($subArray)
                 ? array_pop($cards)
-                : cards;
+                : $cards;
 
             foreach($cards AS $card)
             {
@@ -320,6 +337,11 @@ Namespace Poker
             }
 
             return $cCards;
+        }
+
+        public function getGame()
+        {
+            print_r($this); die;
         }
 
         /**
