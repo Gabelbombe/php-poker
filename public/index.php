@@ -14,6 +14,7 @@ require APP_PATH . '/src/Helpers/AutoLoader.php';
 $autoLoader = New AutoLoader(APP_PATH . '/src/');
 
 $autoLoader->registerNamespaces()
+           ->registerGenericNamespace('Players')
            ->registerGenericNamespace('Helpers')
            ->registerGenericNamespace('Database')
            ->registerGenericNamespace('Poker');
