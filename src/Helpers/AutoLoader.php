@@ -17,6 +17,7 @@ Class AutoLoader
     {
         $this->registerGenericNamespace($namespace, $path)
              ->registerLibraryNamespace()
+             ->registerModelsNamespace()
              ->registerConfigNamespace()
              ->registerHelperNamespace();
 
@@ -58,6 +59,14 @@ Class AutoLoader
     public function registerLibraryNamespace()
     {
         $autoloader = $this->getAutoloader('Library', $this->rootPath .'/Library/');
+        $this->registerAutoloader($autoloader);
+
+        return $this;
+    }
+
+    public function registerModelsNamespace()
+    {
+        $autoloader = $this->getAutoloader('Models', $this->rootPath .'/Models/');
         $this->registerAutoloader($autoloader);
 
         return $this;

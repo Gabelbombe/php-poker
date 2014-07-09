@@ -6,9 +6,11 @@
 
 Namespace Helpers
 {
-    USE Poker\HoldEm        AS Game;        //backwards, should be using Poker\HoldEm AS Game or something
-    USE Database\Broker     AS Broker;      //DB Connector
-    USE ServiceProvider     AS Config;      //base config selector
+    USE Players\Live;                       /** not sure what this is */
+
+    USE Poker\HoldEm        AS Game,        //backwards, should be using Poker\HoldEm AS Game or something
+        Models\Registrar    AS Registrar,
+        ServiceProvider     AS Config;      //base config selector
 
 
     Class Bootstrap
@@ -18,11 +20,19 @@ Namespace Helpers
 
         protected   $game    = false;
 
-
         public function __construct(array $payload = [])
         {
+            define('CLI', (! $payload['type'] ?: 0));
+
+
+            /**
+             * Move below to some other parsing class
+             * GET will be altered with POST sometime
+             * later(ish)
+             */
+
             // convert CLI opts to GET params if you're playing from the command line
-            if (! $payload['type']) parse_str(implode("&", array_slice($payload['args'], 1)), $_GET);
+            if (CLI) parse_str(implode("&", array_slice($payload['args'], 1)), $_GET);
 
             // normally wouldn't do this without filtering but I"m already over time....
             $this->players = (isset($_GET['players'])) ? $_GET['players']  : false; // filter_input
@@ -39,7 +49,15 @@ Namespace Helpers
         {
             header('Content-type: text/plain; charset=UTF-8');
 
-            if (! isset($_SESSION['utid'])) $this->createNewSession();
+            if (! isset($_SESSION['utid']))
+            {
+                $this->newUser(New Accounts());
+
+                //$this->createNewSession();
+            } //->???()
+
+                // some kind of continue ???
+
         }
 
 
@@ -99,7 +117,7 @@ Namespace Helpers
 
         private function createNewSession()
         {
-            $this->utid = md5(time() + rand());
+//            $this->utid = md5(time() + rand());
 
             $session = New Broker($this->utid, $this->createGame());
             $session->push();
@@ -116,6 +134,14 @@ Namespace Helpers
         {
 
             return $this->game->convert($this->game->getHands(1, 2), 1);
+        }
+
+        private function newUser($utid)
+        {
+
+            $account = New Registrar($utid);
+
+            print_r($account);
         }
     }
 }

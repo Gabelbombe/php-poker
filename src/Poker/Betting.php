@@ -4,7 +4,7 @@
  */
 Namespace Poker
 {
-    use Database\Broker;
+    USE Database\Broker;
     USE Rules\RulesInterface;
 
     Abstract Class Betting Implements RulesInterface
@@ -15,9 +15,9 @@ Namespace Poker
         protected   $total      = 0;        //dunno if this should be public or not
 
 
-        public function __construct()
+        public function __construct($broker)
         {
-            // ....
+            $this->broker = $broker;
         }
 
         public function check()
@@ -61,29 +61,42 @@ Namespace Poker
 
     }
 
-    Final Class NoLimit
+
+    /**
+     * Class NoLimit
+     * @package Poker
+     */
+    Final Class NoLimit Extends Betting
     {
-        public function __construct()
+        public function __construct($broker)
         {
-            parent::__construct();
+            parent::__construct($broker);
         }
     }
 
-    Final Class FixedLimit
-    {
-        public function __construct()
-        {
-            parent::__construct();
-        }
 
+    /**
+     * Class FixedLimit
+     * @package Poker
+     */
+    Final Class FixedLimit Extends Betting
+    {
+        public function __construct($broker)
+        {
+            parent::__construct($broker);
+        }
     }
 
-    Final Class PotLimit
-    {
-        public function __construct()
-        {
-            parent::__construct();
-        }
 
+    /**
+     * Class PotLimit
+     * @package Poker
+     */
+    Final Class PotLimit Extends Betting
+    {
+        public function __construct($broker)
+        {
+            parent::__construct($broker);
+        }
     }
 }

@@ -2,6 +2,7 @@ CREATE DATABASE holdem;
 USE holdem;
 
 
+DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id`                  bigint(20)    NOT NULL AUTO_INCREMENT,
   `utid`                varchar(127)  DEFAULT NULL,
@@ -9,6 +10,7 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
 
+DROP TABLE IF EXISTS `session_store`;
 CREATE TABLE `session_store` (
   `id`                  bigint(20)    NOT NULL AUTO_INCREMENT,
   `utid`                varchar(127)  DEFAULT NULL,
@@ -19,6 +21,7 @@ CREATE TABLE `session_store` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
 
+DROP TABLE IF EXISTS `current_game`;
 CREATE TABLE `current_game` (
   `id`                  bigint(20)    NOT NULL AUTO_INCREMENT,
   `utid`                varchar(127)  DEFAULT NULL,
@@ -28,6 +31,7 @@ CREATE TABLE `current_game` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+DROP TABLE IF EXISTS `bank`;
 CREATE TABLE `bank` (
   `id`                  bigint(20)    NOT NULL AUTO_INCREMENT,
   `utid`                varchar(127)  DEFAULT NULL,
