@@ -33,6 +33,10 @@ Namespace Helpers
             // convert CLI opts to GET params if you're playing from the command line
             if (CLI) parse_str(implode("&", array_slice($payload['args'], 1)), $_GET);
 
+
+            // session isn't being stored over CLI so we need some witchcraft...
+            $this->session = (isset($_GET['session'])) ? $_GET['session'] : false;
+
             // normally wouldn't do this without filtering but I"m already over time....
             $this->players = (isset($_GET['players'])) ? $_GET['players']  : false; // filter_input
 
@@ -48,7 +52,7 @@ Namespace Helpers
         {
             header('Content-type: text/plain; charset=UTF-8');
 
-            if (! isset($_SESSION['utid']) || isset($_COOKIE['utid d']))
+            if (false === $this->session)
             {
                 $this->newUser(New Accounts());
             } else {
@@ -113,8 +117,17 @@ Namespace Helpers
 
         private function createSession()
         {
-print_r($this);
+            print_r($this);
+            print_r($_COOKIE);
+            print_r($_SESSION);
 
+            $_SESSION['utid'] = $this->utid;
+            $_COOKIE['utid']  = $this->utid;
+
+            print_r($this);
+            print_r($_COOKIE);
+            print_r($_SESSION);
+die;
             $session = New Broker($this->utid, $this->createGame());
             $session->push();
 
@@ -138,9 +151,16 @@ print_r($this);
             $account = New Registrar($utid);
             $account->register();
 
-                echo "New user: {$account->getUser()->getUtid()} registered!!";
+            $this->setUtid($account->getUser()->getUtid());
+
+                echo "New user: {$this->utid} registered!!";
 
             $this->createSession();
+        }
+
+        private function setUtid($utid)
+        {
+            return $this->utid = $utid;
         }
     }
 }

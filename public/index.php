@@ -3,7 +3,10 @@ error_reporting(-1);
 ini_set('display_errors', 1);
 
 // kick start session
-('' === session_id()) | session_start();
+if ('' === session_id())
+{
+    session_start();
+}
 
 putenv('APP_ENV=dev');
 
