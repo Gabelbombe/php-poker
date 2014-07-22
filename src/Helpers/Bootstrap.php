@@ -56,7 +56,10 @@ Namespace Helpers
             {
                 $this->newUser(New Accounts());
             } else {
-                die('lookup');
+                //$this->getUser();
+
+                $this->doView();
+
             }
         }
 
@@ -99,7 +102,14 @@ Namespace Helpers
 
             echo "Let's go guys!!!\n";
 
-            echo "\n\n" . print_r($game->showPlayerHands(),  1);
+            $player      = $game->showPlayerHands() ['player_1'];
+
+            echo "\n\nYour hand is: ";
+
+                foreach ($player AS $card) echo "$card ";
+
+
+            echo "\n";
 
             foreach (['flop', 'turn', 'river'] AS $part)
             {
@@ -108,10 +118,18 @@ Namespace Helpers
                 sleep(3);
             }
 
-            echo "\n\n" . ucwords(str_replace('_', ' ', $game->getWinner()))
-                . " wins!!! ({$game->getWinningDescription()})"; // the winner
+            echo "\n\n";
 
-            # echo "\n\n" . print_r($game->showPlayerPoints(), 1);
+            foreach (array_slice($game->showPlayerPoints(), 1) AS $id => $player)
+            {
+                echo ucwords(implode(' ', explode('_', $id))) . "'s hand: " . implode (' ', $player['hand']);
+                echo "\nDescription {$player['description']}\n\n";
+                sleep(3);
+            }
+
+            echo "\n\n" . ucwords(str_replace('_', ' ', $game->getWinner()))
+                . " wins!!! ({$game->getWinningDescription()})\n\n"; // the winner
+
 
         }
 
