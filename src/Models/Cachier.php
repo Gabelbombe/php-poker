@@ -6,9 +6,15 @@ Namespace Models
 
     Class Cachier Extends Adapter
     {
+        protected $user = false;
+
         public function __construct($utid)
         {
             parent::__construct($utid);
+
+                $this->user = $utid;
+
+            self::init();
         }
 
         public function payout($total)
@@ -17,11 +23,11 @@ Namespace Models
                 'INSERT INTO session_store SET utid = :utid, hand = :hand, winner = :winner, active = 1'
             );
 
-            $st->execute([
-                ':utid'     => $this->u,
-                ':hand'     => $this->h,
-                ':winner'   => $this->w,
-            ]);
+                $st->execute([
+                    ':utid'     => $this->u,
+                    ':hand'     => $this->h,
+                    ':winner'   => $this->w,
+                ]);
         }
     }
 }

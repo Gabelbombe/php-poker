@@ -24,7 +24,6 @@ Namespace Helpers
         {
             define('CLI', (! $payload['type'] ?: 0));
 
-
             /**
              * Move below to some other parsing class
              * GET will be altered with POST sometime
@@ -49,15 +48,12 @@ Namespace Helpers
         {
             header('Content-type: text/plain; charset=UTF-8');
 
-            if (! isset($_SESSION['utid']))
+            if (! isset($_SESSION['utid']) || isset($_COOKIE['utid d']))
             {
                 $this->newUser(New Accounts());
-
-                //$this->createNewSession();
-            } //->???()
-
-                // some kind of continue ???
-
+            } else {
+                die('lookup');
+            }
         }
 
 
@@ -115,9 +111,9 @@ Namespace Helpers
 
         }
 
-        private function createNewSession()
+        private function createSession()
         {
-//            $this->utid = md5(time() + rand());
+print_r($this);
 
             $session = New Broker($this->utid, $this->createGame());
             $session->push();
@@ -140,8 +136,11 @@ Namespace Helpers
         {
 
             $account = New Registrar($utid);
+            $account->register();
 
-            print_r($account);
+                echo "New user: {$account->getUser()->getUtid()} registered!!";
+
+            $this->createSession();
         }
     }
 }
