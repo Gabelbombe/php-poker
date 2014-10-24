@@ -2,7 +2,9 @@
 
 Namespace Helpers
 {
-    Class Accounts
+    USE Database\Adapter;
+
+    Class Accounts Extends Adapter
     {
 
         const WALLET_SIZE = 1000;
@@ -11,15 +13,22 @@ Namespace Helpers
                   $action = false,
                   $wallet = 0;
 
+        private   $user   = false;
+
         public function __construct($utid = false)
         {
+            parent::__construct($utid);
+
+                $this->utid = $utid;
+
             $action = (! $utid ? 'generate' : 'fetch');
 
-            $this->action = [
-                $action
-            ];
+                $this->action = [
+                    $action
+                ];
+print_r($this);
 
-                return $this->$action();
+            return $this->$action();
         }
 
         public function generate()
@@ -29,6 +38,25 @@ Namespace Helpers
 
             return $this;
         }
+
+
+        public function getUser()
+        {
+            $st = self::$db->prepare(
+                'SELECT * FROM users WHERE utid = :utid'
+            );
+
+                $st->execute([
+                    ':utid'     => $this->utid,
+                ]);
+
+            $result = $st->fetchAll();
+            print_r($this);
+
+print_r($result); die;
+        }
+
+
 
         public function fetch()
         {
@@ -41,7 +69,6 @@ Namespace Helpers
                 ? $this->wallet
                 : null;
         }
-
 
         public function getUtid()
         {

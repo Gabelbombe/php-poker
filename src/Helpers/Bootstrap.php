@@ -16,9 +16,12 @@ Namespace Helpers
     Class Bootstrap
     {
         private     $players = false,
-                    $utid    = false;
+                    $utid    = false,
+                    $account = false,
+                    $pot     = 0;
 
-        protected   $game    = false;
+        protected   $game    = false,
+                    $bet     = false;
 
         public function __construct(array $payload = [])
         {
@@ -33,12 +36,22 @@ Namespace Helpers
             // convert CLI opts to GET params if you're playing from the command line
             if (CLI) parse_str(implode("&", array_slice($payload['args'], 1)), $_GET);
 
+            $this->metrics = New Metrics($_GET);
+
+            $this->metrics->hasInput()
+                          ->cntPlyrs();
+
+
+                $this->bet = (isset($_GET['bet'])) ? $_GET['bet'] : false;
+
 
             // session isn't being stored over CLI so we need some witchcraft...
-            $this->session = (isset($_GET['session'])) ? $_GET['session'] : false;
+            $this->session = (isset($_GET['session']))
+                ? $_GET['session']
+                : false;
 
-            // normally wouldn't do this without filtering but I"m already over time....
-            $this->players = (isset($_GET['players'])) ? $_GET['players']  : false; // filter_input
+            $this->account = New Accounts($this->session);
+
 
             // available rules: NoLimit,
             $this->rules = (isset($_GET['rules']))
@@ -56,7 +69,8 @@ Namespace Helpers
             {
                 $this->newUser(New Accounts());
             } else {
-                //$this->getUser();
+
+                $this->account->getUser();
 
                 $this->doView();
 

@@ -56,6 +56,25 @@ Class AutoLoader
         return $this;
     }
 
+
+    public function registerGenericNamespaces(array $namespaces)
+    {
+        foreach($namespaces AS $namespace => $path)
+        {
+            $path = (FALSE === $path)
+                ? $namespace 
+                : $path;
+
+            if (is_dir($this->rootPath . "/$path/"))
+            {
+                $autoloader = $this->getAutoloader($path, $this->rootPath . "/$path/");
+                $this->registerAutoloader($autoloader);
+            }
+        }
+
+        return $this;
+    }
+
     public function registerLibraryNamespace()
     {
         $autoloader = $this->getAutoloader('Library', $this->rootPath .'/Library/');
