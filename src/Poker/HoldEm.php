@@ -249,7 +249,7 @@ Namespace Poker
          * @param int $players
          * @throws \LogicException
          */
-        public function __construct($players = 2)
+        public function __construct($players = 5)
         {
             if ($players > $this->maxPlayers) Throw New \LogicException("Max allowed players is {$this->maxPlayers}");
 
@@ -1278,7 +1278,7 @@ Namespace Poker
                     foreach ($seedOrdCards AS $card) $ordCards[] = $card;
                 }
             }
-            
+
             elseif (FALSE === $bySeed )
             {
                 $order =
